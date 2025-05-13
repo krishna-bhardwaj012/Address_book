@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Book</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { width: 50%; margin: auto; }
+        textarea { width: 100%; height: 80px; }
+        ul { list-style-type: none; padding: 0; }
+        li { cursor: pointer; padding: 5px; border: 1px solid #ccc; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Address Book</h2>
+        <label>Name:</label>
+        <input type="text" id="name">
+        <br>
+        <label>Email:</label>
+        <input type="email" id="email">
+        <br>
+        <label>Phone No.:</label>
+        <input type="text" id="number">
+        <br>
+        <label>Address:</label>
+        <textarea id="address"></textarea>
+        <br>
+        <button onclick="addEntry()">Add</button>
+        <button onclick="resetFields()">Reset</button>
+        <ul id="contactList"></ul>
+    </div>
+    <script>
+        let contacts = [];
+
+        function addEntry() {
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+            let number = document.getElementById("number").value;
+            let address = document.getElementById("address").value;
+            if (name && email && number && address) {
+                contacts.push({ name, email, number, address });
+                updateList();
+                resetFields();
+            }
+        }
+
+        function updateList() {
+            let list = document.getElementById("contactList");
+            list.innerHTML = "";
+            contacts.forEach((contact, index) => {
+                let li = document.createElement("li");
+                li.textContent = `${contact.name} (${contact.email})`;
+                li.onclick = () => viewEntry(index);
+                list.appendChild(li);
+            });
+        }
+
+        function viewEntry(index) {
+            document.getElementById("name").value = contacts[index].name;
+            document.getElementById("email").value = contacts[index].email;
+            document.getElementById("number").value = contacts[index].number;
+            document.getElementById("address").value = contacts[index].address;
+        }
+
+        function resetFields() {
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("number").value = "";
+            document.getElementById("address").value = "";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Book</title>
+    <style>
+        body { 
+            font-family: 'Poppins', 'Segoe UI', 'Roboto', Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f0f0f0; 
+        }
+        .container { 
+            width: 50%; 
+            margin: auto; 
+            background-color: #e6f7ff; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+        }
+        h2 {
+            font-family: 'Poppins', 'Segoe UI', 'Roboto', Arial, sans-serif;
+            font-size: 2.2rem;
+            color: #1976d2;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+        label {
+            font-family: 'Poppins', 'Segoe UI', 'Roboto', Arial, sans-serif;
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+            margin-right: 8px;
+        }
+        input, textarea {
+            font-family: 'Poppins', 'Segoe UI', 'Roboto', Arial, sans-serif;
+            font-size: 1rem;
+            border: 1px solid #bdbdbd;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 10px;
+            width: 60%;
+            box-sizing: border-box;
+        }
+        textarea { 
+            width: 100%; 
+            height: 80px; 
+        }
+        ul { 
+            list-style-type: none; 
+            padding: 0; 
+        }
+        li { 
+            cursor: pointer; 
+            padding: 8px; 
+            border: 1px solid #90caf9; 
+            margin: 5px 0; 
+            background: #fff;
+            border-radius: 4px;
+            font-size: 1.05rem;
+            transition: background 0.2s;
+        }
+        li:hover {
+            background: #e3f2fd;
+        }
+        button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: 'Poppins', 'Segoe UI', 'Roboto', Arial, sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #1565c0;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>Address Book</h2>
+        <label>Name:</label>
+        <input type="text" id="name">
+        <br>
+        <label>Phone No.:</label>
+        <input type="text" id="number">
+        <br>
+        <label>Address:</label>
+        <textarea id="address"></textarea>
+        <br>
+        <button onclick="addEntry()">Add</button>
+        <button onclick="resetFields()">Reset</button>
+        <button onclick="clearAllContacts()">Clear All</button>
+        <ul id="contactList"></ul>
+    </div>
+    <script>
+        // Load contacts from localStorage on page load
+        let contacts = JSON.parse(localStorage.getItem("contacts") || "[]");
+        updateList();
+
+        function addEntry() {
+            let name = document.getElementById("name").value;
+            let number = document.getElementById("number").value;
+            let address = document.getElementById("address").value;
+            if (name && number && address) {
+                contacts.push({ name, number, address });
+                localStorage.setItem("contacts", JSON.stringify(contacts)); // Save to localStorage
+                updateList();
+                resetFields();
+            }
+        }
+
+        function updateList() {
+            let list = document.getElementById("contactList");
+            list.innerHTML = "";
+            contacts.forEach((contact, index) => {
+                let li = document.createElement("li");
+                li.textContent = contact.name;
+                li.onclick = () => viewEntry(index);
+                list.appendChild(li);
+            });
+            localStorage.setItem("contacts", JSON.stringify(contacts)); // Save to localStorage
+        }
+
+        function viewEntry(index) {
+            document.getElementById("name").value = contacts[index].name;
+            document.getElementById("number").value = contacts[index].number;
+            document.getElementById("address").value = contacts[index].address;
+        }
+
+        function resetFields() {
+            document.getElementById("name").value = "";
+            document.getElementById("number").value = "";
+            document.getElementById("address").value = "";
+        }
+
+        function clearAllContacts() {
+            contacts = [];
+            localStorage.setItem("contacts", JSON.stringify(contacts));
+            updateList();
+        }
+    </script>
+</body>
+</html>
